@@ -90,6 +90,7 @@ $lang_profile = array(
 'Yahoo'							=>	'Yahoo! Messenger',
 'Avatar'						=>	'Avatar',
 'Signature'						=>	'Signature',
+'Custom css style'              =>  'Custom css style',
 'Sig max size'					=>	'Max length: %s characters / Max lines: %s',
 'Avatar legend'					=>	'Set your avatar display options',
 'Avatar info'					=>	'An avatar is a small image that will be displayed with all your posts. You can upload an avatar by clicking the link below.',
