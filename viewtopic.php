@@ -245,16 +245,16 @@ while ($cur_post = $db->fetch_assoc($result))
 	if ($custom_style != '')
 	{
 		$custom_style = str_replace("\n", " ", $custom_style);
-		$custom_style = ' style="' . pun_htmlspecialchars($custom_style) . '"';
+		$custom_style = ' style="' . pun_htmlspecialchars($custom_style) . ' !important"';
 	}
 
 	// If the poster is a registered user
 	if ($cur_post['poster_id'] > 1)
 	{		
 		if ($pun_user['g_view_users'] == '1')
-			$username = '<a' . $custom_style . ' href="profile.php?id='.$cur_post['poster_id'].'">'.pun_htmlspecialchars($cur_post['username']).'</a>';
+			$username = '<strong><a' . $custom_style . ' href="profile.php?id='.$cur_post['poster_id'].'">'.pun_htmlspecialchars($cur_post['username']).'</a></strong>';
 		else
-			$username = pun_htmlspecialchars($cur_post['username']);
+			$username = '<strong' . $custom_style . '>' . pun_htmlspecialchars($cur_post['username']) . '</strong>';
 
 		$user_title = get_title($cur_post);
 
@@ -384,7 +384,7 @@ while ($cur_post = $db->fetch_assoc($result))
 			<div class="postbody">
 				<div class="postleft">
 					<dl>
-						<dt><strong><?php echo $username ?></strong></dt>
+						<dt><?php echo $username ?></dt>
 						<dd class="usertitle"><strong><?php echo $user_title ?></strong></dd>
 <?php if ($user_avatar != '') echo "\t\t\t\t\t\t".'<dd class="postavatar">'.$user_avatar.'</dd>'."\n"; ?>
 <?php if (count($user_info)) echo "\t\t\t\t\t\t".implode("\n\t\t\t\t\t\t", $user_info)."\n"; ?>
