@@ -13,6 +13,8 @@ define('PUN_ROOT', dirname(__FILE__).'/');
 require PUN_ROOT.'include/common.php';
 require PUN_ROOT.'include/common_admin.php';
 
+require PUN_ROOT.'lang/'.$pun_user['language'].'/profile.php';
+
 
 if ($pun_user['g_id'] != PUN_ADMIN)
 	message($lang_common['No permission'], false, '403 Forbidden');
@@ -83,6 +85,12 @@ if (isset($_POST['add_group']) || isset($_GET['edit_group']))
 									<td>
 										<input type="text" name="user_title" size="25" maxlength="50" value="<?php echo pun_htmlspecialchars($group['g_user_title']) ?>" tabindex="2" />
 										<span><?php printf($lang_admin_groups['User title help'], ($group['g_id'] != PUN_GUEST ? $lang_common['Member'] : $lang_common['Guest'])) ?></span>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row"><?php echo $lang_profile['Custom css style'] ?></th>
+									<td>
+										<textarea name="custom_style" rows="4" cols="65"><?php echo pun_htmlspecialchars($group['g_custom_style']) ?></textarea>									
 									</td>
 								</tr>
 <?php if ($group['g_id'] != PUN_ADMIN): if ($group['g_id'] != PUN_GUEST): ?>								<tr>
@@ -309,6 +317,9 @@ else if (isset($_POST['add_edit_group']))
 	$title = pun_trim($_POST['req_title']);
 	$user_title = pun_trim($_POST['user_title']);
 
+	$custom_style = pun_trim($_POST['custom_style']);
+	$custom_style = ($custom_style != '') ? '\''.$db->escape($custom_style).'\'' : 'NULL';
+
 	$promote_min_posts = isset($_POST['promote_min_posts']) ? intval($_POST['promote_min_posts']) : '0';
 	if (isset($_POST['promote_next_group']) &&
 			isset($groups[$_POST['promote_next_group']]) &&
@@ -366,7 +377,7 @@ else if (isset($_POST['add_edit_group']))
 		if ($db->num_rows($result))
 			message(sprintf($lang_admin_groups['Title already exists message'], pun_htmlspecialchars($title)));
 
-		$db->query('UPDATE '.$db->prefix.'groups SET g_title=\''.$db->escape($title).'\', g_user_title='.$user_title.', g_promote_min_posts='.$promote_min_posts.', g_promote_next_group='.$promote_next_group.', g_moderator='.$moderator.', g_mod_edit_users='.$mod_edit_users.', g_mod_rename_users='.$mod_rename_users.', g_mod_change_passwords='.$mod_change_passwords.', g_mod_ban_users='.$mod_ban_users.', g_mod_promote_users='.$mod_promote_users.', g_read_board='.$read_board.', g_view_users='.$view_users.', g_post_replies='.$post_replies.', g_post_topics='.$post_topics.', g_edit_posts='.$edit_posts.', g_delete_posts='.$delete_posts.', g_delete_topics='.$delete_topics.', g_post_links='.$post_links.', g_set_title='.$set_title.', g_search='.$search.', g_search_users='.$search_users.', g_send_email='.$send_email.', g_post_flood='.$post_flood.', g_search_flood='.$search_flood.', g_email_flood='.$email_flood.', g_report_flood='.$report_flood.' WHERE g_id='.intval($_POST['group_id'])) or error('Unable to update group', __FILE__, __LINE__, $db->error());
+		$db->query('UPDATE '.$db->prefix.'groups SET g_title=\''.$db->escape($title).'\', g_user_title='.$user_title.', g_custom_style=' . $custom_style . ', g_promote_min_posts='.$promote_min_posts.', g_promote_next_group='.$promote_next_group.', g_moderator='.$moderator.', g_mod_edit_users='.$mod_edit_users.', g_mod_rename_users='.$mod_rename_users.', g_mod_change_passwords='.$mod_change_passwords.', g_mod_ban_users='.$mod_ban_users.', g_mod_promote_users='.$mod_promote_users.', g_read_board='.$read_board.', g_view_users='.$view_users.', g_post_replies='.$post_replies.', g_post_topics='.$post_topics.', g_edit_posts='.$edit_posts.', g_delete_posts='.$delete_posts.', g_delete_topics='.$delete_topics.', g_post_links='.$post_links.', g_set_title='.$set_title.', g_search='.$search.', g_search_users='.$search_users.', g_send_email='.$send_email.', g_post_flood='.$post_flood.', g_search_flood='.$search_flood.', g_email_flood='.$email_flood.', g_report_flood='.$report_flood.' WHERE g_id='.intval($_POST['group_id'])) or error('Unable to update group', __FILE__, __LINE__, $db->error());
 
 		// Promote all users who would be promoted to this group on their next post
 		if ($promote_next_group)
