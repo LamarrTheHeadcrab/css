@@ -896,6 +896,11 @@ else if (isset($_POST['form_sent']))
 				}
 			}
 
+			if (isset($_POST['custom_style']))
+			{
+				$form['custom_style'] =  pun_linebreaks(pun_trim($_POST['custom_style']));
+			}
+
 			break;
 		}
 
@@ -1596,7 +1601,7 @@ else
 						</div>
 					</fieldset>
 				</div>
-<?php endif; ?>
+<?php endif; if($pun_user['is_admmod']): ?>
 				<div class="inform">
 					<fieldset>
 						<legend><?php echo $lang_profile['Custom css style'] ?></legend>
@@ -1611,8 +1616,7 @@ else
 			</form>
 		</div>
 	</div>
-<?php
-
+	<?php endif;
 	}
 	else if ($section == 'display')
 	{
