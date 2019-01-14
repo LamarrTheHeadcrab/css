@@ -919,15 +919,12 @@ function get_title_and_style($user)
 	
 	$custom_style = '';
 	
-	if ($is_banned)
+	if ($user['custom_style'] != '')
+		$custom_style = $user['custom_style'];
+	else if ($is_banned)
 		$custom_style = $pun_config['o_banned_custom_style'];
-	else 
-	{
-		if ($user['custom_style'] != '')
-			$custom_style = $user['custom_style'];
-		else if ($user['group_style'] != '')
-			$custom_style = $user['group_style'];
-	}
+	else if ($user['group_style'] != '')
+		$custom_style = $user['group_style'];
 
 	if ($custom_style != '')
 	{
