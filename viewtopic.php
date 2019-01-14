@@ -235,28 +235,19 @@ while ($cur_post = $db->fetch_assoc($result))
 	$post_actions = array();
 	$is_online = '';
 	$signature = '';
-	$custom_style = '';
-	
-	if ($cur_post['custom_style'] != '')
-		$custom_style = $cur_post['custom_style'];
-	else if ($cur_post['group_style'] != '')
-		$custom_style = $cur_post['group_style'];
-
-	if ($custom_style != '')
-	{
-		$custom_style = str_replace("\n", " ", $custom_style);
-		$custom_style = ' style="' . pun_htmlspecialchars($custom_style) . ' !important"';
-	}
 
 	// If the poster is a registered user
 	if ($cur_post['poster_id'] > 1)
-	{		
+	{
+		$title_and_style = get_title_and_style($cur_post);
+		$custom_style = $title_and_style[1];
+		
 		if ($pun_user['g_view_users'] == '1')
 			$username = '<strong><a' . $custom_style . ' href="profile.php?id='.$cur_post['poster_id'].'">'.pun_htmlspecialchars($cur_post['username']).'</a></strong>';
 		else
 			$username = '<strong' . $custom_style . '>' . pun_htmlspecialchars($cur_post['username']) . '</strong>';
 
-		$user_title = get_title($cur_post);
+		$user_title = $title_and_style[0];
 
 		if ($pun_config['o_censoring'] == '1')
 			$user_title = censor_words($user_title);

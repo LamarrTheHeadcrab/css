@@ -38,6 +38,8 @@ $lang_admin_bans = array(
 'Ascending'					=>	'Ascending',
 'Descending'				=>	'Descending',
 'Submit search'				=>	'Submit search',
+'Banned CSS'				=>	'Banned users CSS style',
+'CSS style'					=>	'CSS style',
 
 'E-mail label'				=>	'Email',
 'E-mail help'				=>	'The email or email domain you wish to ban (e.g. someone@somewhere.com or somewhere.com). See "Allow banned email addresses" in Permissions for more info.',

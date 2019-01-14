@@ -879,6 +879,67 @@ function get_title($user)
 
 
 //
+// Determines the correct title and nickname style for $user
+// $user must contain the elements 'username', 'title', 'posts', 'g_id', 'custom_style', 'group_style' and 'g_user_title'
+//
+function get_title_and_style($user)
+{
+	global $pun_bans, $lang_common, $pun_config;
+	static $ban_list;
+
+	// If not already built in a previous call, build an array of lowercase banned usernames
+	if (empty($ban_list))
+	{
+		$ban_list = array();
+
+		foreach ($pun_bans as $cur_ban)
+			$ban_list[] = utf8_strtolower($cur_ban['username']);
+	}
+	
+	$is_banned = false;
+	
+	// If the user is banned
+	if (in_array(utf8_strtolower($user['username']), $ban_list))
+	{
+		$is_banned = true;
+		$user_title = $lang_common['Banned'];
+	}
+	// If the user has a custom title
+	else if ($user['title'] != '')
+		$user_title = pun_htmlspecialchars($user['title']);
+	// If the user group has a default user title
+	else if ($user['g_user_title'] != '')
+		$user_title = pun_htmlspecialchars($user['g_user_title']);
+	// If the user is a guest
+	else if ($user['g_id'] == PUN_GUEST)
+		$user_title = $lang_common['Guest'];
+	// If nothing else helps, we assign the default
+	else
+		$user_title = $lang_common['Member'];
+	
+	$custom_style = '';
+	
+	if ($is_banned)
+		$custom_style = $pun_config['o_banned_custom_style'];
+	else 
+	{
+		if ($user['custom_style'] != '')
+			$custom_style = $user['custom_style'];
+		else if ($user['group_style'] != '')
+			$custom_style = $user['group_style'];
+	}
+
+	if ($custom_style != '')
+	{
+		$custom_style = str_replace("\n", " ", $custom_style);
+		$custom_style = ' style="' . pun_htmlspecialchars($custom_style) . ' !important"';
+	}
+	
+	return array($user_title, $custom_style);
+}
+
+
+//
 // Generate a string with numbered links (for multipage scripts)
 //
 function paginate($num_pages, $cur_page, $link)

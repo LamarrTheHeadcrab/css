@@ -20,6 +20,22 @@ if ($pun_user['g_id'] != PUN_ADMIN && ($pun_user['g_moderator'] != '1' || $pun_u
 // Load the admin_bans.php language file
 require PUN_ROOT.'lang/'.$admin_language.'/admin_bans.php';
 
+if ($pun_user['is_admmod'] && isset($_POST['banned_userstyle']))
+{
+	$custom_style = pun_linebreaks(pun_trim($_POST['banned_userstyle']));
+	$custom_style = $db->escape($custom_style);
+	$db->query('UPDATE '.$db->prefix.'config SET conf_value=\''.$custom_style.'\' WHERE conf_name=\'o_banned_custom_style\'') or error('Unable to update banned users CSS style', __FILE__, __LINE__, $db->error());
+	
+	// Regenerate the config cache
+	if (!defined('FORUM_CACHE_FUNCTIONS_LOADED'))
+		require PUN_ROOT.'include/cache.php';
+	
+	generate_config_cache();
+	
+	// require config cache again to show changed state
+	require FORUM_CACHE_DIR.'cache_config.php';
+}
+else
 // Add/edit a ban (stage 1)
 if (isset($_REQUEST['add_ban']) || isset($_GET['edit_ban']))
 {
@@ -559,6 +575,26 @@ generate_admin_menu('bans');
 					</fieldset>
 				</div>
 				<p class="submitend"><input type="submit" name="find_ban" value="<?php echo $lang_admin_bans['Submit search'] ?>" tabindex="12" /></p>
+			</form>
+		</div>
+		<h2><span><?php echo $lang_admin_bans['Banned CSS'] ?></span></h2>
+		<div class="box">
+			<form id="banned_style" method="post" action="admin_bans.php">
+				<div class="inform">
+					<fieldset>
+						<legend><?php echo $lang_admin_bans['CSS style'] ?></legend>
+						<div class="infldset">
+							<table class="aligntop">
+								<tr>
+									<td>
+										<textarea style="width:100%;" rows="5" name="banned_userstyle"><?php echo pun_htmlspecialchars($pun_config['o_banned_custom_style']) ?></textarea>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</fieldset>
+				</div>
+				<p class="submitend"><input type="submit" name="banned_style" value="<?php echo $lang_common['Submit'] ?>" tabindex="12"></p>
 			</form>
 		</div>
 	</div>
