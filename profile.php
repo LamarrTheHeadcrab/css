@@ -896,7 +896,7 @@ else if (isset($_POST['form_sent']))
 				}
 			}
 
-			if (isset($_POST['custom_style']))
+			if ($pun_user['is_admmod'] && isset($_POST['custom_style']))
 			{
 				$form['custom_style'] =  pun_linebreaks(pun_trim($_POST['custom_style']));
 			}
@@ -1601,7 +1601,8 @@ else
 						</div>
 					</fieldset>
 				</div>
-<?php endif; if($pun_user['is_admmod']): ?>
+<?php endif; ?>				<p class="buttons"><input type="submit" name="update" value="<?php echo $lang_common['Submit'] ?>" /> <?php echo $lang_profile['Instructions'] ?></p>
+<?php if($pun_user['is_admmod']): ?>
 				<div class="inform">
 					<fieldset>
 						<legend><?php echo $lang_profile['Custom css style'] ?></legend>
@@ -1612,13 +1613,12 @@ else
 						</div>
 					</fieldset>
 				</div>
-				<p class="buttons"><input type="submit" name="update" value="<?php echo $lang_common['Submit'] ?>" /> <?php echo $lang_profile['Instructions'] ?></p>
 			</form>
 		</div>
 	</div>
 	<?php endif;
 	}
-	else if ($section == 'display')
+	else if ($section == 'display')	
 	{
 		$page_title = array(pun_htmlspecialchars($pun_config['o_board_title']), $lang_common['Profile'], $lang_profile['Section display']);
 		define('PUN_ACTIVE_PAGE', 'profile');
