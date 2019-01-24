@@ -1601,7 +1601,7 @@ else
 						</div>
 					</fieldset>
 				</div>
-<?php endif; ?>				<p class="buttons"><input type="submit" name="update" value="<?php echo $lang_common['Submit'] ?>" /> <?php echo $lang_profile['Instructions'] ?></p>
+<?php endif; ?>
 <?php if($pun_user['is_admmod']): ?>
 				<div class="inform">
 					<fieldset>
@@ -1613,10 +1613,11 @@ else
 						</div>
 					</fieldset>
 				</div>
+<?php endif; ?>				<p class="buttons"><input type="submit" name="update" value="<?php echo $lang_common['Submit'] ?>" /> <?php echo $lang_profile['Instructions'] ?></p>				
 			</form>
 		</div>
 	</div>
-	<?php endif;
+	<?php
 	}
 	else if ($section == 'display')	
 	{
